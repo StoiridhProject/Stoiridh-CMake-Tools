@@ -16,6 +16,7 @@
 ##            along with this program.  If not, see <http://www.gnu.org/licenses/>.               ##
 ##                                                                                                ##
 ####################################################################################################
+stoiridh_include("Stoiridh.Assert" INTERNAL)
 stoiridh_include("Stoiridh.Qt.Helper" INTERNAL)
 
 ####################################################################################################
