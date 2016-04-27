@@ -16,6 +16,9 @@
 ##            along with this program.  If not, see <http://www.gnu.org/licenses/>.               ##
 ##                                                                                                ##
 ####################################################################################################
+stoiridh_include("Stoiridh.Assert" INTERNAL)
+
+####################################################################################################
 ##  stoiridh_install_local_api(HEADERS <header1> [<header2>...]                                   ##
 ##                             DESTINATION <relative path>                                        ##
 ##                             [FILE_SUFFIXES <suffix1> [<suffix2>...]]                           ##
@@ -55,13 +58,9 @@ function(STOIRIDH_INSTALL_LOCAL_API)
     set(MVK "HEADERS" "PUBLIC" "INTERNAL" "PRIVATE" "FILE_SUFFIXES" "PATH_SUFFIXES")
     cmake_parse_arguments(STOIRIDH_COMMAND "" "${OVK}" "${MVK}" ${ARGN})
 
-    if(NOT STOIRIDH_COMMAND_HEADERS)
-        message(FATAL_ERROR "stoiridh_install_local_api: HEADERS is missing.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_DESTINATION)
-        message(FATAL_ERROR "stoiridh_install_local_api: DESTINATION is missing.")
-    endif()
+    # preconditions
+    stoiridh_assert(STOIRIDH_COMMAND_DESTINATION "DESTINATION is not specified or is empty.")
+    stoiridh_assert(STOIRIDH_COMMAND_HEADERS "HEADERS is not specified or is an empty list.")
 
     if(NOT STOIRIDH_COMMAND_FILE_SUFFIXES)
         set(HEADER_SUFFIXES ".h;.hpp;.hxx;.inl;.tpp")

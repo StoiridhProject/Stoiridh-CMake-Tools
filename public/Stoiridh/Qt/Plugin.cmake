@@ -48,13 +48,9 @@ function(STOIRIDH_QT_ADD_PLUGIN target)
     set(MVK "SOURCES" "DEPENDS" "OTHER_FILES")
     cmake_parse_arguments(STOIRIDH_COMMAND "${OPTIONS}" "${OVK}" "${MVK}" ${ARGN})
 
-    if(NOT STOIRIDH_COMMAND_SOURCES)
-        message(FATAL_ERROR "stoiridh_qt_add_library: SOURCES is missing or not defined.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_DEPENDS)
-        message(FATAL_ERROR "stoiridh_qt_add_library: DEPENDS is missing or not defined.")
-    endif()
+    # preconditions
+    stoiridh_assert(STOIRIDH_COMMAND_DEPENDS "DEPENDS is not specified or is an empty list.")
+    stoiridh_assert(STOIRIDH_COMMAND_SOURCES "SOURCES is not specified or is an empty list.")
 
     set(USER_OPTIONS)
 
