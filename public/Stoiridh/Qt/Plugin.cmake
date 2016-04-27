@@ -16,7 +16,7 @@
 ##            along with this program.  If not, see <http://www.gnu.org/licenses/>.               ##
 ##                                                                                                ##
 ####################################################################################################
-stoiridh_include("Stoiridh.Qt.Library")
+stoiridh_include("Stoiridh.Qt.Helper" INTERNAL)
 
 ####################################################################################################
 ##  stoiridh_qt_add_plugin(<target> [ALIAS <alias>]                                               ##
@@ -62,15 +62,33 @@ function(STOIRIDH_QT_ADD_PLUGIN target)
         set(USER_OPTIONS "${USER_OPTIONS}" "USE_QT_PRIVATE_API")
     endif()
 
-    stoiridh_qt_add_library(${target}
-                            ALIAS ${STOIRIDH_COMMAND_ALIAS}
-                            SOURCES ${STOIRIDH_COMMAND_SOURCES}
-                            DEPENDS ${STOIRIDH_COMMAND_DEPENDS}
-                            OTHER_FILES ${STOIRIDH_COMMAND_OTHER_FILES}
-                            ${USER_OPTIONS})
+    # create the Qt plugin
+    stoiridh_qt_helper(MODULE  ${target}
+                       SOURCES ${STOIRIDH_COMMAND_SOURCES}
+                       DEPENDS ${STOIRIDH_COMMAND_DEPENDS}
+                       OTHER_FILES ${STOIRIDH_COMMAND_OTHER_FILES}
+                       ${USER_OPTIONS})
 
     unset(USER_OPTIONS)
 
     # remove the 'lib' prefix for a Qt5 plugin.
     set_target_properties(${target} PROPERTIES IMPORT_PREFIX "" PREFIX "")
+
+    # make an alias of the library for CMake use, e.g., <PROJECT_NAME>::<SUBPROJECT_NAME>.
+    if(STOIRIDH_COMMAND_ALIAS)
+        add_library(${STOIRIDH_COMMAND_ALIAS} ALIAS ${target})
+    endif()
+
+    # move the module either in the binary or plugins directory according to the Operating System.
+    if(STOIRIDH_OS_WINDOWS)
+        set(DESTINATION_DIR "${STOIRIDH_INSTALL_BINARY_DIR}")
+    elseif(STOIRIDH_OS_LINUX)
+        set(DESTINATION_DIR "${STOIRIDH_INSTALL_PLUGINS_DIR}")
+    endif()
+
+    set_target_properties(${target} PROPERTIES
+                          LIBRARY_OUTPUT_DIRECTORY "${STOIRIDH_INSTALL_ROOT}/${DESTINATION_DIR}")
+
+    # add the install rule.
+    install(TARGETS ${target} LIBRARY DESTINATION "${DESTINATION_DIR}")
 endfunction()

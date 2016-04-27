@@ -29,7 +29,7 @@
 ##                                                                                                ##
 ####################################################################################################
 function(stoiridh_qt_helper command target)
-    set(COMMANDS "APPLICATION" "LIBRARY")
+    set(COMMANDS "APPLICATION" "LIBRARY" "MODULE")
     set(OPTIONS "USE_QT_PRIVATE_API")
     set(MVK "SOURCES" "DEPENDS" "OTHER_FILES")
     cmake_parse_arguments(STOIRIDH_COMMAND "${OPTIONS}" "" "${MVK}" ${ARGN})
@@ -61,6 +61,8 @@ function(stoiridh_qt_helper command target)
         add_executable(${target} ${STOIRIDH_COMMAND_SOURCES})
     elseif(command STREQUAL "LIBRARY")
         add_library(${target} SHARED ${STOIRIDH_COMMAND_SOURCES})
+    elseif(command STREQUAL "MODULE")
+        add_library(${target} MODULE ${STOIRIDH_COMMAND_SOURCES})
     endif()
 
     target_link_libraries(${target} ${STOIRIDH_COMMAND_DEPENDS})

@@ -80,22 +80,19 @@ function(STOIRIDH_QT_QML_ADD_EXTENSION_PLUGIN target)
                                PATH_SUFFIXES ${STOIRIDH_COMMAND_QML_PATH_SUFFIXES})
 
     # create the shared library
-    stoiridh_qt_helper(LIBRARY ${target}
+    stoiridh_qt_helper(MODULE ${target}
                        SOURCES ${STOIRIDH_COMMAND_SOURCES}
                        DEPENDS ${STOIRIDH_COMMAND_DEPENDS})
 
     # remove the 'lib' prefix for QtQml plugin.
     set_target_properties(${target} PROPERTIES IMPORT_PREFIX "" PREFIX "")
 
-    # move the library either into the 'bin' or 'lib' directory depends on the Operating System.
+    # move the plugin in the 'qml' directory of the project.
     string(REPLACE "." "/" MODULE_NAME ${STOIRIDH_COMMAND_URI})
-    set(INSTALL_ROOT_DIR "${STOIRIDH_INSTALL_ROOT}/${STOIRIDH_INSTALL_QML_DIR}/${MODULE_NAME}")
+    set(DESTINATION_DIR "${STOIRIDH_INSTALL_QML_DIR}/${MODULE_NAME}")
 
-    if(STOIRIDH_OS_WINDOWS)
-        set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${INSTALL_ROOT_DIR})
-    elseif(STOIRIDH_OS_LINUX)
-        set_target_properties(${target} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${INSTALL_ROOT_DIR})
-    endif()
+    set_target_properties(${target} PROPERTIES
+                          LIBRARY_OUTPUT_DIRECTORY "${STOIRIDH_INSTALL_ROOT}/${DESTINATION_DIR}")
 
     # make an alias of the library for CMake use, e.g., <PROJECT_NAME>::<SUBPROJECT_NAME>.
     if(STOIRIDH_COMMAND_ALIAS)
@@ -103,7 +100,5 @@ function(STOIRIDH_QT_QML_ADD_EXTENSION_PLUGIN target)
     endif()
 
     # add the install rule.
-    install(TARGETS ${target}
-            RUNTIME DESTINATION ${STOIRIDH_INSTALL_QML_DIR}
-            LIBRARY DESTINATION ${STOIRIDH_INSTALL_QML_DIR})
+    install(TARGETS ${target} LIBRARY DESTINATION "${DESTINATION_DIR}")
 endfunction()
