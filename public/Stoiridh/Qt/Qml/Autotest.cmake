@@ -29,7 +29,7 @@ stoiridh_include("Stoiridh.Qt.Helper" INTERNAL)
 ##                                                                                                ##
 ##------------------------------------------------------------------------------------------------##
 ##                                                                                                ##
-##  Add a Qt autotest to the project.                                                             ##
+##  Add a Qt autotest to the project using the Qt Quick Test framework.                           ##
 ##                                                                                                ##
 ##  An <alias> can be set to the <target> in order to be linked with an elegant name in others    ##
 ##  projects.                                                                                     ##
