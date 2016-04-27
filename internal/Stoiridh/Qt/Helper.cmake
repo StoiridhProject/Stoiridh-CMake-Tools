@@ -16,6 +16,9 @@
 ##            along with this program.  If not, see <http://www.gnu.org/licenses/>.               ##
 ##                                                                                                ##
 ####################################################################################################
+stoiridh_include("Stoiridh.Assert" INTERNAL)
+
+####################################################################################################
 ##  stoiridh_qt_helper(<APPLICATION|LIBRARY> <target>                                             ##
 ##                     SOURCES <source1> [<source2>...]                                           ##
 ##                     DEPENDS <dependency1> [<dependency2>...]                                   ##
@@ -38,13 +41,11 @@ function(stoiridh_qt_helper command target)
         message(FATAL_ERROR "stoiridh_qt_helper(${command}): invalid command.")
     endif()
 
-    if(NOT STOIRIDH_COMMAND_SOURCES)
-        message(FATAL_ERROR "stoiridh_qt_helper(${command}): SOURCES is missing or not defined.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_DEPENDS)
-        message(FATAL_ERROR "stoiridh_qt_helper(${command}): DEPENDS is missing or not defined.")
-    endif()
+    # preconditions
+    stoiridh_assert(STOIRIDH_COMMAND_SOURCES "${command}: SOURCES is not specified or is an empty "
+                                             "list.")
+    stoiridh_assert(STOIRIDH_COMMAND_DEPENDS "${command}: DEPENDS is not specified or is an empty "
+                                             "list.")
 
     # include the private headers from the Qt API to ${target} if the USE_QT_PRIVATE_API option is
     # given.

@@ -17,6 +17,7 @@
 ##                                                                                                ##
 ####################################################################################################
 stoiridh_include("Stoiridh.Qt.Qml.Module")
+stoiridh_include("Stoiridh.Assert" INTERNAL)
 stoiridh_include("Stoiridh.Qt.Helper" INTERNAL)
 
 ####################################################################################################
@@ -53,24 +54,12 @@ function(STOIRIDH_QT_QML_ADD_EXTENSION_PLUGIN target)
     set(MVK "DEPENDS" "QML_PATH_SUFFIXES" "QML_SOURCES" "SOURCES" "OTHER_FILES")
     cmake_parse_arguments(STOIRIDH_COMMAND "" "${OVK}" "${MVK}" ${ARGN})
 
-    if(NOT STOIRIDH_COMMAND_DEPENDS)
-        message(FATAL_ERROR "stoiridh_qt_qml_add_extension_plugin: DEPENDS is missing or not "
-                            "defined.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_QML_SOURCES)
-        message(FATAL_ERROR "stoiridh_qt_qml_add_extension_plugin: QML_SOURCES is missing or not "
-                            "defined.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_SOURCES)
-        message(FATAL_ERROR "stoiridh_qt_qml_add_extension_plugin: SOURCES is missing or not "
-                            "defined.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_URI)
-        message(FATAL_ERROR "stoiridh_qt_qml_add_extension_plugin: URI is missing or not defined.")
-    endif()
+    # preconditions
+    stoiridh_assert(STOIRIDH_COMMAND_DEPENDS "DEPENDS is not specified or is an empty list.")
+    stoiridh_assert(STOIRIDH_COMMAND_QML_SOURCES "QML_SOURCES is not specified or is an"
+                                                 "empty list.")
+    stoiridh_assert(STOIRIDH_COMMAND_SOURCES "SOURCES is not specified or is an empty list.")
+    stoiridh_assert(STOIRIDH_COMMAND_URI "URI is not specified or is empty.")
 
     # a QtQml extension plugin is inherently a QtQml module.
     stoiridh_qt_qml_add_module(${target}

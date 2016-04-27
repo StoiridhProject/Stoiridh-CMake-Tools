@@ -16,6 +16,9 @@
 ##            along with this program.  If not, see <http://www.gnu.org/licenses/>.               ##
 ##                                                                                                ##
 ####################################################################################################
+stoiridh_include("Stoiridh.Assert" INTERNAL)
+
+####################################################################################################
 ##  stoiridh_utility_local_install(FILES <file1> [<file2>...]                                     ##
 ##                                 DESTINATION <absolute path>                                    ##
 ##                                 [PATH_SUFFIXES <suffix1> [<suffix2>...]])                      ##
@@ -33,13 +36,9 @@ function(STOIRIDH_UTILITY_LOCAL_INSTALL)
     set(MVK "FILES" "PATH_SUFFIXES")
     cmake_parse_arguments(STOIRIDH_COMMAND "" "${OVK}" "${MVK}" ${ARGN})
 
-    if(NOT STOIRIDH_COMMAND_DESTINATION)
-        message(FATAL_ERROR "stoiridh_utility_local_install: DESTINATION is missing.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_FILES)
-        message(FATAL_ERROR "stoiridh_utility_local_install: FILES is missing.")
-    endif()
+    # preconditions
+    stoiridh_assert(STOIRIDH_COMMAND_DESTINATION "DESTINATION is not specified or is empty.")
+    stoiridh_assert(STOIRIDH_COMMAND_FILES "FILES is not specified or is an empty list.")
 
     foreach(FILE ${STOIRIDH_COMMAND_FILES})
         get_filename_component(FILE_PATH ${FILE} DIRECTORY)

@@ -16,6 +16,7 @@
 ##            along with this program.  If not, see <http://www.gnu.org/licenses/>.               ##
 ##                                                                                                ##
 ####################################################################################################
+stoiridh_include("Stoiridh.Assert" INTERNAL)
 stoiridh_include("Stoiridh.Utility.LocalInstall" INTERNAL)
 
 ####################################################################################################
@@ -41,13 +42,9 @@ function(STOIRIDH_QT_QML_ADD_MODULE target)
     set(MVK "OTHER_FILES" "PATH_SUFFIXES" "SOURCES")
     cmake_parse_arguments(STOIRIDH_COMMAND "" "${OVK}" "${MVK}" ${ARGN})
 
-    if(NOT STOIRIDH_COMMAND_URI)
-        message(FATAL_ERROR "stoiridh_qt_qml_add_module: URI is missing or not defined.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_SOURCES)
-        message(FATAL_ERROR "stoiridh_qt_qml_add_module: SOURCES is missing or not defined.")
-    endif()
+    # preconditions
+    stoiridh_assert(STOIRIDH_COMMAND_SOURCES "SOURCES is not specified or is an empty list.")
+    stoiridh_assert(STOIRIDH_COMMAND_URI "URI is not specified or is empty.")
 
     string(REPLACE "." "/" MODULE_NAME ${STOIRIDH_COMMAND_URI})
     set(INSTALL_ROOT_DIR "${STOIRIDH_INSTALL_ROOT}/${STOIRIDH_INSTALL_QML_DIR}/${MODULE_NAME}")

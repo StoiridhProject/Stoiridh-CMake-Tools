@@ -16,6 +16,7 @@
 ##            along with this program.  If not, see <http://www.gnu.org/licenses/>.               ##
 ##                                                                                                ##
 ####################################################################################################
+stoiridh_include("Stoiridh.Assert" INTERNAL)
 stoiridh_include("Stoiridh.Utility.LocalInstall" INTERNAL)
 
 ####################################################################################################
@@ -97,13 +98,9 @@ function(_STOIRIDH_UTILITY_HEADER_FILTER output)
     set(MVK "HEADERS" "SUFFIXES")
     cmake_parse_arguments(STOIRIDH_COMMAND "" "" "${MVK}" ${ARGN})
 
-    if(NOT STOIRIDH_COMMAND_HEADERS)
-        message(FATAL_ERROR "stoiridh_utility_header(FILTER): HEADERS is missing.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_SUFFIXES)
-        message(FATAL_ERROR "stoiridh_utility_header(FILTER): SUFFIXES is missing.")
-    endif()
+    # preconditions
+    stoiridh_assert(STOIRIDH_COMMAND_HEADERS "HEADERS is not specified or is an empty list.")
+    stoiridh_assert(STOIRIDH_COMMAND_SUFFIXES "SUFFIXES is not specified or is an empty list.")
 
     foreach(HEADER ${STOIRIDH_COMMAND_HEADERS})
         get_filename_component(HEADER_SUFFIX ${HEADER} EXT)
@@ -133,18 +130,11 @@ function(_STOIRIDH_UTILITY_HEADER_FILTER_COPY)
     set(MVK "HEADERS" "HEADER_SUFFIXES" "PATH_SUFFIXES")
     cmake_parse_arguments(STOIRIDH_COMMAND "" "${OVK}" "${MVK}" ${ARGN})
 
-    if(NOT STOIRIDH_COMMAND_HEADERS)
-        message(FATAL_ERROR "_stoiridh_utility_header_filter_copy: "
-                            "HEADERS is missing or is an empty list.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_HEADER_SUFFIXES)
-        message(FATAL_ERROR "_stoiridh_utility_header_filter_copy: HEADER_SUFFIXES is missing.")
-    endif()
-
-    if(NOT STOIRIDH_COMMAND_DESTINATION)
-        message(FATAL_ERROR "_stoiridh_utility_header_filter_copy: DESTINATION is missing.")
-    endif()
+    # preconditions
+    stoiridh_assert(STOIRIDH_COMMAND_HEADERS "HEADERS is not specified or is an empty list.")
+    stoiridh_assert(STOIRIDH_COMMAND_HEADER_SUFFIXES "HEADER_SUFFIXES is not specified or is an "
+                                                     "empty list.")
+    stoiridh_assert(STOIRIDH_COMMAND_DESTINATION "DESTINATION is not specified or is empty.")
 
     stoiridh_utility_header(FILTER
                             HEADERS ${STOIRIDH_COMMAND_HEADERS}
