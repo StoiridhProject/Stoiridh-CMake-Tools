@@ -73,8 +73,10 @@ function(STOIRIDH_QT_QML_ADD_EXTENSION_PLUGIN target)
                        SOURCES ${STOIRIDH_COMMAND_SOURCES}
                        DEPENDS ${STOIRIDH_COMMAND_DEPENDS})
 
-    # remove the 'lib' prefix for QtQml plugin.
-    set_target_properties(${target} PROPERTIES IMPORT_PREFIX "" PREFIX "")
+    # remove the 'lib' prefix for Qt Qml Extension plugin only if we are on Windows.
+    if(STOIRIDH_OS_WINDOWS)
+        set_target_properties(${target} PROPERTIES IMPORT_PREFIX "" PREFIX "")
+    endif()
 
     # move the plugin in the 'qml' directory of the project.
     string(REPLACE "." "/" MODULE_NAME ${STOIRIDH_COMMAND_URI})
