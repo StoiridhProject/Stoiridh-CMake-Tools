@@ -75,11 +75,15 @@ function(STOIRIDH_QT_QML_ADD_AUTOTEST target)
         message(FATAL_ERROR "${DATA_DIR} is not a valid 'data' directory.")
     endif()
 
+    # glob recurse on the data directory in order to retrieve all the files that will be sent to the
+    # stoiridh_qt_helper's OTHER_FILES option.
+    file(GLOB_RECURSE DATA_FILES "${STOIRIDH_COMMAND_DATA_DIR}/*")
+
     # create the autotest executable
     stoiridh_qt_helper(APPLICATION ${target}
                        SOURCES ${STOIRIDH_COMMAND_SOURCES}
                        DEPENDS ${STOIRIDH_COMMAND_DEPENDS}
-                       OTHER_FILES ${STOIRIDH_COMMAND_OTHER_FILES})
+                       OTHER_FILES ${STOIRIDH_COMMAND_OTHER_FILES} ${DATA_FILES})
 
      # make an alias of the library for CMake use, e.g., <PROJECT_NAME>::<SUBPROJECT_NAME>.
      if(STOIRIDH_COMMAND_ALIAS)
