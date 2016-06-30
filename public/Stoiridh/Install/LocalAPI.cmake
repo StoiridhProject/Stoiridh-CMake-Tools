@@ -84,9 +84,14 @@ function(STOIRIDH_INSTALL_LOCAL_API)
                             DESTINATION ${INCLUDE_ROOT_PATH}
                             PATH_SUFFIXES ${STOIRIDH_COMMAND_PATH_SUFFIXES})
 
+    # override the INCLUDE_ROOT_PATH variable in order to add both the VERSION and the DESTINATION
+    # directories. This change allows to install the public, internal, and private API in there.
+    set(INCLUDE_ROOT_PATH
+        "${INCLUDE_ROOT_PATH}/${STOIRIDH_COMMAND_VERSION}/${STOIRIDH_COMMAND_DESTINATION}")
+
     # filter the following commands in order to retrieve only the header files
     if(STOIRIDH_COMMAND_PUBLIC)
-        set(PUBLIC_INCLUDE_PATH "${INCLUDE_ROOT_PATH}/${STOIRIDH_COMMAND_VERSION}/public")
+        set(PUBLIC_INCLUDE_PATH "${INCLUDE_ROOT_PATH}/public")
         stoiridh_utility_header(FILTER_COPY
                                 HEADERS ${STOIRIDH_COMMAND_PUBLIC}
                                 HEADER_SUFFIXES ${HEADER_SUFFIXES}
@@ -95,7 +100,7 @@ function(STOIRIDH_INSTALL_LOCAL_API)
     endif()
 
     if(STOIRIDH_COMMAND_INTERNAL)
-        set(INTERNAL_INCLUDE_PATH "${INCLUDE_ROOT_PATH}/${STOIRIDH_COMMAND_VERSION}/internal")
+        set(INTERNAL_INCLUDE_PATH "${INCLUDE_ROOT_PATH}/internal")
         stoiridh_utility_header(FILTER_COPY
                                 HEADERS ${STOIRIDH_COMMAND_INTERNAL}
                                 HEADER_SUFFIXES ${HEADER_SUFFIXES}
@@ -104,7 +109,7 @@ function(STOIRIDH_INSTALL_LOCAL_API)
     endif()
 
     if(STOIRIDH_COMMAND_PRIVATE)
-        set(PRIVATE_INCLUDE_PATH "${INCLUDE_ROOT_PATH}/${STOIRIDH_COMMAND_VERSION}/private")
+        set(PRIVATE_INCLUDE_PATH "${INCLUDE_ROOT_PATH}/private")
         stoiridh_utility_header(FILTER_COPY
                                 HEADERS ${STOIRIDH_COMMAND_PRIVATE}
                                 HEADER_SUFFIXES ${HEADER_SUFFIXES}
